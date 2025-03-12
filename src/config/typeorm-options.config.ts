@@ -9,7 +9,7 @@ export class TypeOrmOptions implements TypeOrmOptionsFactory {
   ): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
     return {
       type: 'sqlite',
-      database: this.configService.get<string>('DATABASE_TYPE'),
+      database: this.configService.get<string>('DATABASE_NAME'),
       synchronize: true,
       entities: [File],
     };
