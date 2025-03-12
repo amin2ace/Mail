@@ -28,6 +28,8 @@
     "@nestjs/typeorm": "^11.0.0",
     "@types/multer": "^1.4.12",
     "config": "^3.3.12",
+    "dotenv": "^16.4.7",
+    "env": "^0.0.2",
     "joi": "^17.13.3",
     "multer": "^1.4.5-lts.1",
     "reflect-metadata": "^0.2.0",
