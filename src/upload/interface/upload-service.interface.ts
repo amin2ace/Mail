@@ -18,3 +18,5 @@ interface IUploadService {
 
   downloadFiles(files: Express.Multer.File[]): Promise<void>;
 }
+
+export default IUploadService;
