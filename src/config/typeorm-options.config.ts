@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import { File } from 'src/upload/file.entity';
 
 export class TypeOrmOptions implements TypeOrmOptionsFactory {
   constructor(private readonly configService: ConfigService) {}
@@ -10,7 +11,7 @@ export class TypeOrmOptions implements TypeOrmOptionsFactory {
       type: 'sqlite',
       database: this.configService.get<string>('DATABASE_TYPE'),
       synchronize: true,
-      entities: [],
+      entities: [File],
     };
   }
 }
