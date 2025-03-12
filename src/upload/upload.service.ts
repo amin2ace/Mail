@@ -7,11 +7,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { File } from './file.entity';
 import { Repository } from 'typeorm';
 import IUploadService from './interface/upload-service.interface';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UploadService implements IUploadService {
   constructor(
     @InjectRepository(File) private readonly fileRepo: Repository<File>,
+    private readonly configService: ConfigService,
   ) {}
 
   async addFileToDatabase(
@@ -71,9 +73,12 @@ export class UploadService implements IUploadService {
     return true;
   }
 
-  getFilePath(file: Express.Multer.File): Promise<{ filePath: string }> {
-    throw new Error('Method not implemented.');
+  async getFilePath(file: Express.Multer.File): Promise<{ filePath: string }> {
+    const filePath = `${file.destination}/${file.filename}`;
+
+    return { filePath };
   }
+
   downloadFile(file: Express.Multer.File): Promise<void> {
     throw new Error('Method not implemented.');
   }
