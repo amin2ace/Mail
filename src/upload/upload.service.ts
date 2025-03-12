@@ -34,7 +34,7 @@ export class UploadService implements IUploadService {
       });
     }
   }
-  retrieveFile(fileId: string, userId: string): Promise<File> {
+  async retrieveFile(fileId: string, userId: string): Promise<File> {
     const storedFile = this.fileRepo.findOne({
       where: {
         fileId,
@@ -49,12 +49,28 @@ export class UploadService implements IUploadService {
     return storedFile;
   }
 
-  retrieveFiles(userId: string): Promise<File[]> {
-    throw new Error('Method not implemented.');
+  async retrieveFiles(userId: string): Promise<File[]> {
+    const files = await this.fileRepo.find({
+      where: {
+        userId,
+      },
+    });
+    return files;
   }
-  checkAccess(fileId: string, userId: string): Promise<Boolean> {
-    throw new Error('Method not implemented.');
+
+  async checkAccess(fileId: string, userId: string): Promise<Boolean> {
+    const storedFile = await this.fileRepo.findOne({
+      where: {
+        fileId,
+      },
+    });
+
+    if (storedFile.userId !== userId) {
+      throw new ForbiddenException('File Access Denied');
+    }
+    return true;
   }
+
   getFilePath(file: Express.Multer.File): Promise<{ filePath: string }> {
     throw new Error('Method not implemented.');
   }
