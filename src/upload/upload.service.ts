@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { File } from './file.entity';
 import { Repository } from 'typeorm';
+import IUploadService from './interface/upload-service.interface';
 
 @Injectable()
 export class UploadService implements IUploadService {
