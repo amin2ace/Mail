@@ -1,4 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   MulterModuleOptions,
   MulterOptionsFactory,
@@ -8,12 +9,12 @@ import { extname } from 'path';
 
 @Injectable()
 export class MulterService implements MulterOptionsFactory {
-  constructor() {}
+  constructor(private readonly configService: ConfigService) {}
 
   createMulterOptions(): Promise<MulterModuleOptions> | MulterModuleOptions {
     return {
       storage: diskStorage({
-        destination: './uploads',
+        destination: this.configService.get<string>('UPLOAD_DIR'),
         filename(req, file, callback) {
           const fileOldName = file.originalname;
 
