@@ -15,6 +15,12 @@ export class File {
   fileId: string;
 
   @Column()
+  fileOldName: string;
+
+  @Column()
+  fileNewName: string;
+
+  @Column()
   userId: string;
 
   @Column()
