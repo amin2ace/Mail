@@ -1,4 +1,66 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { File } from './file.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class UploadService {}
+export class UploadService implements IUploadService {
+  constructor(
+    @InjectRepository(File) private readonly fileRepo: Repository<File>,
+  ) {}
+
+  async addFileToDatabase(
+    file: Express.Multer.File,
+    userId: string,
+  ): Promise<{ fileId: string }> {
+    const fileRecord = this.fileRepo.create({
+      fileSize: `${file.size / 1024} KB`, // File size in KB
+      fileOldName: file.originalname,
+      fileNewName: file.filename,
+      userId,
+    });
+
+    try {
+      await this.fileRepo.save(fileRecord);
+      return { fileId: fileRecord.fileId };
+    } catch (error) {
+      throw new ForbiddenException('File Record Creation Failed', {
+        description: error,
+      });
+    }
+  }
+  retrieveFile(fileId: string, userId: string): Promise<File> {
+    const storedFile = this.fileRepo.findOne({
+      where: {
+        fileId,
+        userId,
+      },
+    });
+
+    if (!storedFile) {
+      throw new UnauthorizedException('Requested File Not Found');
+    }
+
+    return storedFile;
+  }
+
+  retrieveFiles(userId: string): Promise<File[]> {
+    throw new Error('Method not implemented.');
+  }
+  checkAccess(fileId: string, userId: string): Promise<Boolean> {
+    throw new Error('Method not implemented.');
+  }
+  getFilePath(file: Express.Multer.File): Promise<{ filePath: string }> {
+    throw new Error('Method not implemented.');
+  }
+  downloadFile(file: Express.Multer.File): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  downloadFiles(files: Express.Multer.File[]): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+}
