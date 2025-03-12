@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Post,
   UploadedFile,
@@ -18,9 +19,9 @@ export class UploadController {
   @Post('/upload-files')
   async uploadFiles(@UploadedFiles() files: Express.Multer.File) {}
 
-  @Post('/retrieve-file/:file-id')
+  @Get('/retrieve-file/:file-id')
   async retrieveFile(@Param('file-id') fileId: string) {}
 
-  @Post('/retrieve-files/:user-id')
+  @Get('/retrieve-files/:user-id')
   async retrieveFiles(@Param('user-id') userId: string) {}
 }
